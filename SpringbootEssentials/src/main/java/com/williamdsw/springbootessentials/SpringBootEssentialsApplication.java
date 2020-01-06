@@ -1,11 +1,10 @@
 package com.williamdsw.springbootessentials;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@EnableAutoConfiguration
-@ComponentScan (basePackages = "com.williamdsw.springbootessentials.endpoint")
+// @Configuration + @EnableAutoConfiguration + @ComponentScan
+@SpringBootApplication
 public class SpringBootEssentialsApplication
 {
     public static void main (String[] args)
