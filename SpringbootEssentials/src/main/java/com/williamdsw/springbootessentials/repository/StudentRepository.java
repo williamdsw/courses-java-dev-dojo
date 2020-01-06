@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudentRepository extends CrudRepository<Student, Long>
 {
-    public List<Student> findByName (String name);
+    public List<Student> findByNameIgnoreCaseContaining (String name);
 }
