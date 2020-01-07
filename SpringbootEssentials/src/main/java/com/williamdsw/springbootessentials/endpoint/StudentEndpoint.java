@@ -1,6 +1,7 @@
 package com.williamdsw.springbootessentials.endpoint;
 
 import com.williamdsw.springbootessentials.error.CustomErrorType;
+import com.williamdsw.springbootessentials.error.ResourceNotFoundException;
 import com.williamdsw.springbootessentials.model.Student;
 import com.williamdsw.springbootessentials.repository.StudentRepository;
 import java.util.Optional;
@@ -50,12 +51,8 @@ public class StudentEndpoint
     @GetMapping (path = "/{id}")
     public ResponseEntity<?> getStudentById (@PathVariable ("id") Long id)
     {
+        verifyIfStudentExists (id);
         Optional<Student> student = studentDAO.findById (id);
-        if (student == null)
-        {
-            return new ResponseEntity<>(new CustomErrorType ("Student not found"), HttpStatus.NOT_FOUND);
-        }
-        
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
     
@@ -74,6 +71,7 @@ public class StudentEndpoint
     @PutMapping
     public ResponseEntity<?> update (@RequestBody Student student)
     {
+        verifyIfStudentExists (student.getId ());
         studentDAO.save (student);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -81,7 +79,16 @@ public class StudentEndpoint
     @DeleteMapping (path = "/{id}")
     public ResponseEntity<?> delete (@PathVariable Long id)
     {
+        verifyIfStudentExists (id);
         studentDAO.deleteById (id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    
+    //------------------------------------------------------------------------//
+    // HELPER FUNCTIONS
+    
+    private void verifyIfStudentExists (Long id)
+    {
+        studentDAO.findById (id).orElseThrow (() -> new ResourceNotFoundException (String.format ("Student not found for ID : %s!", id)));
     }
 }
