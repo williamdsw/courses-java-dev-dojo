@@ -33,6 +33,18 @@ public class Student extends AbstractEntity
     //------------------------------------------------------------------------//
     // GETTERS / SETTERS
 
+    @Override
+    public Long getId ()
+    {
+        return super.getId ();
+    }
+
+    @Override
+    public void setId (Long id)
+    {
+        super.setId (id);
+    }
+
     public String getName ()
     {
         return name;
@@ -48,6 +60,7 @@ public class Student extends AbstractEntity
         return email;
     }
 
+    
     public void setEmail (String email)
     {
         this.email = email;

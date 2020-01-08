@@ -1,5 +1,6 @@
 package com.williamdsw.springbootessentials.javaclient;
 
+import com.williamdsw.springbootessentials.handler.RestResponseExceptionHandler;
 import com.williamdsw.springbootessentials.model.PageableResponse;
 import com.williamdsw.springbootessentials.model.Student;
 import java.util.List;
@@ -27,8 +28,8 @@ public class JavaClientDAO
     private final String password = "devdojo";
 
     // Conexao e recupera o objeto
-    RestTemplate restTemplate = new RestTemplateBuilder ().rootUri (rootUri).basicAuthentication (username, password).build ();
-    RestTemplate restTemplateAdmin = new RestTemplateBuilder ().rootUri (rootUriAdmin).basicAuthentication (username, password).build ();
+    RestTemplate restTemplate = new RestTemplateBuilder ().rootUri (rootUri).basicAuthentication (username, password).errorHandler (new RestResponseExceptionHandler ()).build ();
+    RestTemplate restTemplateAdmin = new RestTemplateBuilder ().rootUri (rootUriAdmin).basicAuthentication (username, password).errorHandler (new RestResponseExceptionHandler ()).build ();
     
     //------------------------------------------------------------------------//
     // HELPER FUNCTIONS
@@ -60,5 +61,14 @@ public class JavaClientDAO
         ResponseEntity<Student> post = restTemplateAdmin.exchange ("/", HttpMethod.POST, entity, Student.class);
         return post.getBody ();
     }
-   
+    
+    public void update (Student student)
+    {
+        restTemplateAdmin.put ("/", student);
+    }
+    
+    public void delete (Long id)
+    {
+        restTemplateAdmin.delete ("/{id}", id);
+    }  
 }
