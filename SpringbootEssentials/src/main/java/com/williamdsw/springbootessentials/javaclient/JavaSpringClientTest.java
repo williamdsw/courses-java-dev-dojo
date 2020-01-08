@@ -1,15 +1,6 @@
 package com.williamdsw.springbootessentials.javaclient;
 
-import com.williamdsw.springbootessentials.model.PageableResponse;
 import com.williamdsw.springbootessentials.model.Student;
-import java.util.Arrays;
-import java.util.List;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author William
@@ -18,71 +9,12 @@ public class JavaSpringClientTest
 {
     public static void main (String[] args)
     {
-        //getStudent ();
-        //getStudents ();
-        //getPageableStudents ();
-        getPageableStudentsSorted ();
-    }
-    
-    //------------------------------------------------------------------------//
-    // HELPER FUNCTIONS
-
-    private static void getStudent () throws RestClientException
-    {
-        String rootUri = "http://localhost:8080/v1/protected/students";
-        String username = "dave";
-        String password = "devdojo";
+        Student student = new Student ("Marty Friedman", "marty@email.com");
+        JavaClientDAO dao = new JavaClientDAO ();
         
-        // Conexao e recupera o objeto
-        RestTemplate restTemplate = new RestTemplateBuilder ().rootUri (rootUri).basicAuthentication (username, password).build ();
-        Student student = restTemplate.getForObject ("/{id}", Student.class, 10);
-        ResponseEntity<Student> entity = restTemplate.getForEntity ("/{id}", Student.class, 10);
-        
-        System.out.println (student);
-        System.out.println (entity);
-    }
-    
-    private static void getStudents () throws RestClientException
-    {
-        String rootUri = "http://localhost:8080/v1/protected/students";
-        String username = "dave";
-        String password = "devdojo";
-        
-        // Conexao e recupera o objeto
-        RestTemplate restTemplate = new RestTemplateBuilder ().rootUri (rootUri).basicAuthentication (username, password).build ();
-        Student[] students = restTemplate.getForObject ("/", Student[].class);
-        ParameterizedTypeReference<List<Student>> reference = new ParameterizedTypeReference<List<Student>> (){};
-        ResponseEntity<List<Student>> entity = restTemplate.exchange ("/", HttpMethod.GET, null, reference);
-        
-        System.out.println (Arrays.toString (students));
-        System.out.println (entity.getBody ());
-    }
-    
-    private static void getPageableStudents () throws RestClientException
-    {
-        String rootUri = "http://localhost:8080/v1/protected/students";
-        String username = "dave";
-        String password = "devdojo";
-        
-        // Conexao e recupera o objeto
-        RestTemplate restTemplate = new RestTemplateBuilder ().rootUri (rootUri).basicAuthentication (username, password).build ();
-        ParameterizedTypeReference<PageableResponse<Student>> reference = new ParameterizedTypeReference<PageableResponse<Student>> (){};
-        ResponseEntity<PageableResponse<Student>> entity = restTemplate.exchange ("/", HttpMethod.GET, null, reference);
-        List<Student> students = entity.getBody ().getContent ();
-        System.out.println (students);
-    }
-    
-    private static void getPageableStudentsSorted () throws RestClientException
-    {
-        String rootUri = "http://localhost:8080/v1/protected/students";
-        String username = "dave";
-        String password = "devdojo";
-        
-        // Conexao e recupera o objeto
-        RestTemplate restTemplate = new RestTemplateBuilder ().rootUri (rootUri).basicAuthentication (username, password).build ();
-        ParameterizedTypeReference<PageableResponse<Student>> reference = new ParameterizedTypeReference<PageableResponse<Student>> (){};
-        ResponseEntity<PageableResponse<Student>> entity = restTemplate.exchange ("/?sort=name,desc&sort=email,asc", HttpMethod.GET, null, reference);
-        List<Student> students = entity.getBody ().getContent ();
-        System.out.println (students);
+        // Conexoes
+        System.out.println (dao.findById (20L));
+        System.out.println (dao.listAll ());
+        System.out.println (dao.save (student));
     }
 }
