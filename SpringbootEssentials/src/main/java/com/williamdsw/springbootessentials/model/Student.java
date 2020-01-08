@@ -52,4 +52,13 @@ public class Student extends AbstractEntity
     {
         this.email = email;
     }
+    
+    //------------------------------------------------------------------------//
+    // OVERRIDED FUNCTIONS
+
+    @Override
+    public String toString ()
+    {
+        return String.format ("%s - %s", this.getName (), this.getEmail ());
+    }
 }
