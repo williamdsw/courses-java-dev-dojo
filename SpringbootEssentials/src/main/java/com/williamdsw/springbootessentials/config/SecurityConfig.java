@@ -1,12 +1,13 @@
 package com.williamdsw.springbootessentials.config;
 
+import com.williamdsw.springbootessentials.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * @author William
@@ -16,6 +17,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableGlobalMethodSecurity (prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
+    //------------------------------------------------------------------------//
+    // FIELDS
+    
+    @Autowired private CustomUserDetailService customUserDetailService;
+    
     //------------------------------------------------------------------------//
     // OVERRIDED FUNCTIONS
 
@@ -31,15 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             .csrf ().disable ();
     }
     
-    //------------------------------------------------------------------------//
-    // HELPER FUNCTIONS
-    
-    @Autowired
-    public void configureGlobal (AuthenticationManagerBuilder builder) throws Exception
+    @Override
+    protected void configure (AuthenticationManagerBuilder auth) throws Exception
     {
-        builder.inMemoryAuthentication ()
-               .withUser ("dave").password ("{noop}megadeth").roles ("USER")
-               .and ()
-               .withUser ("admin").password ("{noop}admin").roles ("USER", "ADMIN");
+        auth.userDetailsService (customUserDetailService).passwordEncoder (new BCryptPasswordEncoder ());
     }
 }
