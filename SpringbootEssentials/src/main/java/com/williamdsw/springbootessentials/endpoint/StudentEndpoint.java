@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping (path = "/students")
+@RequestMapping (path = "/v1")
 public class StudentEndpoint
 {
     //------------------------------------------------------------------------//
@@ -45,13 +45,13 @@ public class StudentEndpoint
     //------------------------------------------------------------------------//
     // ENDPOINTS
     
-    @GetMapping
+    @GetMapping (path = "/protected/students")
     public ResponseEntity<?> listAll (Pageable pageable)
     {
         return new ResponseEntity<>(studentDAO.findAll (pageable), HttpStatus.OK);
     }
     
-    @GetMapping (path = "/{id}")
+    @GetMapping (path = "/protected/students/{id}")
     public ResponseEntity<?> getStudentById (@PathVariable ("id") Long id)
     {
         verifyIfStudentExists (id);
@@ -59,20 +59,20 @@ public class StudentEndpoint
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
     
-    @GetMapping (path = "/findByName/{name}")
+    @GetMapping (path = "/protected/students/findByName/{name}")
     public ResponseEntity<?> findStudentsByName (@PathVariable String name)
     {
         return new ResponseEntity<>(studentDAO.findByNameIgnoreCaseContaining (name), HttpStatus.OK);
     }
     
-    @PostMapping
+    @PostMapping (path = "/admin/students")
     @Transactional
     public ResponseEntity<?> save (@Valid @RequestBody Student student)
     {
         return new ResponseEntity<> (studentDAO.save (student), HttpStatus.CREATED);
     }
     
-    @PutMapping
+    @PutMapping (path = "/admin/students")
     public ResponseEntity<?> update (@RequestBody Student student)
     {
         verifyIfStudentExists (student.getId ());
@@ -81,7 +81,7 @@ public class StudentEndpoint
     }
     
     @PreAuthorize ("hasRole('ADMIN')")
-    @DeleteMapping (path = "/{id}")
+    @DeleteMapping (path = "/admin/students/{id}")
     public ResponseEntity<?> delete (@PathVariable Long id)
     {
         verifyIfStudentExists (id);
