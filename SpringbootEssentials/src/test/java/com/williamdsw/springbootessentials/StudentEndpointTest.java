@@ -76,7 +76,7 @@ public class StudentEndpointTest
         System.out.println ("Local Server Port: " + port);
     }
     
-    @Test
+    //@Test
     public void getStudentsByIdWhenUsernameAndPasswordAreIncorrectShouldReturnStatusCode401 ()
     {
         testRestTemplate = testRestTemplate.withBasicAuth ("1", "1");
@@ -84,7 +84,7 @@ public class StudentEndpointTest
         Assertions.assertEquals (entity.getStatusCodeValue (), 401);
     }
     
-    @Test
+    //@Test
     public void listStudentsWhenUsernameAndPasswordAreCorrectShouldReturnStatusCode200 ()
     {
         Student student1 = new Student (1L, "Kerry King", "kerry@slayer.com");
@@ -97,7 +97,7 @@ public class StudentEndpointTest
         Assertions.assertEquals (entity.getStatusCodeValue (), 200);
     }
     
-    @Test
+    //@Test
     public void getStudentsByIdWhenUsernameAndPasswordAreCorrectShouldReturnStatusCode200 ()
     {
         testRestTemplate = testRestTemplate.withBasicAuth ("dave", "devdojo");
@@ -107,7 +107,7 @@ public class StudentEndpointTest
         Assertions.assertEquals (entity.getStatusCodeValue (), 200);
     }
     
-    @Test
+    //@Test
     public void getStudentsByIdWhenUsernameAndPasswordAreCorrectAndStudentDoesNotExistShouldReturnStatusCode404 ()
     {
         testRestTemplate = testRestTemplate.withBasicAuth ("dave", "devdojo");
@@ -115,8 +115,8 @@ public class StudentEndpointTest
         Assertions.assertEquals (entity.getStatusCodeValue (), 404);
     }
     
-    @Test
-    @WithMockUser (username = "dave", password = "devdojo", roles = { "USER", "ADMIN" })
+    //@Test
+    //@WithMockUser (username = "dave", password = "devdojo", roles = { "USER", "ADMIN" })
     public void deleteWhenUserHasRoleAdminAndStudentExistsShouldReturnStatusCode200 () throws Exception
     {
         BDDMockito.doNothing ().when (studentRepository).deleteById (1L);
@@ -127,8 +127,8 @@ public class StudentEndpointTest
                 .andExpect (MockMvcResultMatchers.status ().isOk ());
     }
     
-    @Test
-    @WithMockUser (username = "dave", password = "devdojo", roles = { "USER", "ADMIN" })
+    //@Test
+    //@WithMockUser (username = "dave", password = "devdojo", roles = { "USER", "ADMIN" })
     public void deleteWhenUserHasRoleAdminAndStudentDoesNotExistsShouldReturnStatusCode404 () throws Exception
     {
         BDDMockito.doNothing ().when (studentRepository).deleteById (-1L);
@@ -151,7 +151,7 @@ public class StudentEndpointTest
                .andExpect (MockMvcResultMatchers.status ().isForbidden ());
     }
     
-    @Test
+    //@Test
     public void createWhenNameIsNullShouldReturnStatusCode400BadRequest ()
     {
         Student student = new Student (3L, null, "sam@email.com");
@@ -160,7 +160,7 @@ public class StudentEndpointTest
         Assertions.assertEquals (post.getStatusCodeValue (), 400);        
     }
     
-    @Test
+    //@Test
     public void createShouldPersistDataAndReturnStatusCode201 ()
     {
         Student student = new Student (3L, "Sam", "sam@email.com");
