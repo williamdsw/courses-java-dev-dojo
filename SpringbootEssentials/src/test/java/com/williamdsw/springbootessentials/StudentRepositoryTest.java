@@ -22,7 +22,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 //@AutoConfigureTestDatabase (replace = AutoConfigureTestDatabase.Replace.NONE)
 public class StudentRepositoryTest
 {
+    //------------------------------------------------------------------------//
+    // FIELDS
+    
     @Autowired private StudentRepository studentRepository;
+    
+    //------------------------------------------------------------------------//
+    // TESTS
     
     // Testa insert
     @Test
