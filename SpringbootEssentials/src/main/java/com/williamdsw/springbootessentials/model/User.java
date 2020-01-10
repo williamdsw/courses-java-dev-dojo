@@ -20,7 +20,6 @@ public class User extends AbstractEntity
     private String username;
     
     @NotEmpty (message = "Password is required")
-    @JsonIgnore
     private String password;
     
     @NotEmpty (message = "Name is required")

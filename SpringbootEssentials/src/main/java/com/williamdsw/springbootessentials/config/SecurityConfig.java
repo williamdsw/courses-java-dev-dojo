@@ -2,6 +2,7 @@ package com.williamdsw.springbootessentials.config;
 
 import com.williamdsw.springbootessentials.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,13 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure (HttpSecurity http) throws Exception
     {
-        http.authorizeRequests ()
-            .antMatchers ("/*/protected/**").hasAnyRole ("USER")
-            .antMatchers ("/*/admin/**").hasAnyRole ("ADMIN")
+    	http.cors ().and ().csrf ().disable ().authorizeRequests ()
+    		.antMatchers(HttpMethod.GET, SecurityConstants.SIGN_UP_URL).permitAll ()
+    		.antMatchers ("/*/protected/**").hasRole ("USER")
+            .antMatchers ("/*/admin/**").hasRole ("ADMIN")
             .and ()
-            .httpBasic ()
-            .and ()
-            .csrf ().disable ();
+            .addFilter(new JWTAuthenticationFilter (this.authenticationManager ()))
+            .addFilter(new JWTAuthorizationFilter(this.authenticationManager (), customUserDetailService));
     }
     
     @Override
