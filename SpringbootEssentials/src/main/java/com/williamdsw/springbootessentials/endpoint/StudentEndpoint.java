@@ -3,6 +3,7 @@ package com.williamdsw.springbootessentials.endpoint;
 import com.williamdsw.springbootessentials.error.ResourceNotFoundException;
 import com.williamdsw.springbootessentials.model.Student;
 import com.williamdsw.springbootessentials.repository.StudentRepository;
+import io.swagger.annotations.ApiOperation;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class StudentEndpoint
     //------------------------------------------------------------------------//
     // ENDPOINTS
     
+    @ApiOperation (value = "Return a list with all students", response = Student[].class)
     @GetMapping (path = "/protected/students")
     public ResponseEntity<?> listAll (Pageable pageable)
     {
